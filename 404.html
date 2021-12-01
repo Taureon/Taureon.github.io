@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<title>Error 404</title>
+		<script>
+			function makeParagraph(text) {
+				let child = document.createElement("p");
+				child.appendChild(document.createTextNode(text));
+				return child;
+			}
+
+			window.onload = () => {
+				let body = document.getElementsByTagName('body')[0];
+
+				let texts = [
+					"Make sure the URL is written correctly.",
+					"Make sure you stop looking for secrets."
+				];
+				
+				texts.forEach(text => {
+					body.appendChild(makeParagraph(text));
+				});
+
+				let textnode = document.createTextNode("Click here to return to the home page.");
+				let last = document.createElement("a")
+				last.appendChild(textnode);
+				last.href = "./index.html";
+				body.appendChild(last);
+			};
+		</script>
+	</head>
+	<body>
+		<h1><b>Error 404: Page Not Found.</b></h1>
+		<h2>How to fix:</h2>
+	</body>
+</html>

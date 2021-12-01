@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<title>Resource credits!</title>
+		<style id="color">
+			* {
+				font-family: sans-serif
+			}
+		</style>
+		<script type="text/javascript" defer>
+			var chatDiv, input;
+			function login(username) {
+				if (/^[\d\w _\-]{1,32}$/i.test(username)) {
+					document.getElementById('login').style.display = "none";
+					document.getElementById('chat').style.display = "flex";
+				} else {
+					document.getElementById('loginName').value = "Invalid username.";
+				}
+			}
+			window.onload=()=>{
+				chatDiv = document.getElementById('chatLog'),
+				input = document.getElementById('input');
+			};
+		</script>
+	</head>
+	<body>
+		<div id="login">
+			<input type="text" id="loginName" oninput="this.value = this.value.length > 32 ? this.value.slice(0, 16) : this.value"></input>
+			<button onclick="login(document.getElementById('loginName').value)">Choose Name</button>
+		</div>
+		<div id="chat" style="display:none">
+			<div id="chatLog"></div>
+			<input type="text" size="150" oninput="this.size = 150 < this.value.length ? this.value.length : 150" id="input"></input>
+		</div>
+	</body>
+</html>

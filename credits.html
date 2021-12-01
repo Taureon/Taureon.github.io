@@ -1,0 +1,91 @@
+<html>
+	<head>
+		<title>Resource credits!</title>
+		<style id="color">
+			@-webkit-keyframes colorfade {
+				0% {background-color: #ff0000;}
+				8% {background-color: #ff8800;}
+				16% {background-color: #ffff00;}
+				24% {background-color: #88ff00;}
+				32% {background-color: #00ff00;}
+				40% {background-color: #00ff88;}
+				48% {background-color: #00ffff;}
+				56% {background-color: #0088ff;}
+				64% {background-color: #0000ff;}
+				72% {background-color: #8800ff;}
+				80% {background-color: #ff00ff;}
+				90% {background-color: #ff0088;}
+				100% {background-color: #ff0000;}
+			}
+
+			@font-face {
+				font-family: Hacked;
+				src: url(https://hackedfont.com/HACKED.ttf);
+			}
+
+			* {text-align: center;}
+
+			body {
+				height: 100px;
+				/*background-color: purple;*/
+				-webkit-animation-name: colorfade;
+				-webkit-animation-iteration-count: infinite;  
+				-webkit-animation-duration: 60s;
+			}
+		</style>
+		<script type="text/javascript" defer>
+
+			//the boys!
+			var the_boys = [{
+				resource: "Hacked font",
+				resourceStyle: "font-family:Hacked",
+				author: "David Libeau",
+				link: "https://hackedfont.com/"
+			},{
+				resource: "Programming research",
+				author: "W3Schools",
+				link: "https://www.w3schools.com/"
+			},{
+				resource: "Answering really specific questions",
+				author: "Stack Overflow",
+				link: "https://stackoverflow.com/"
+			},{
+				resource: "several SVG emojis",
+				author: "Discord",
+				link: "https://discord.com/"
+			}];
+
+			window.onload=()=>{
+				let masterdiv = document.getElementById('everyone');
+
+				the_boys.forEach(credit => {
+					let div = document.createElement("div");
+					div.style = "border-style:solid;margin:0 auto;width:250px;padding-bottom:5";
+
+					let h2 = document.createElement("h2");
+					h2.textContent = credit.resource;
+					if (credit.resourceStyle) {
+						h2.style = credit.resourceStyle;
+					}
+
+					let p = document.createElement("p");
+					p.textContent = credit.author;
+
+					let a = document.createElement("a");
+					a.textContent = credit.link;
+					a.href = credit.link;
+
+					div.appendChild(h2);
+					div.appendChild(p);
+					div.appendChild(a);
+					masterdiv.appendChild(div);
+				});
+			};
+		</script>
+	</head>
+	<body>
+		<h1 style="padding-bottom:20;padding-top:5">The awesome fellas that I got good resources from:</h1>
+		<div id="everyone">
+		</div>
+	</body>
+</html>

@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<title>TauBot's Website</title>
+		<!--why this wont work half of the time is not understandable for me...-->
+		<link rel="icon" href="./favicon.ico" type="image/x-icon">
+
+		<!--discord embed stuff-->
+		<meta property="og:type" content="website">
+		<meta property="og:title" content="TauBot's Website" />
+		<meta property="og:description" content="Hey there! This is the Homepage of Taureon's Discord Bot! (aka TauBot)" />
+		<meta property="og:url" content="https://TauBot.samuelgaming.repl.co/" />
+		<meta property="og:image" content="https://taubot.samuelgaming.repl.co/TauBot.png" />
+
+		<link rel="stylesheet" type="text/css" href="./index.css">
+		<script type="text/javascript">
+			//redirect function
+			function redir(url) {
+				window.location.href = url;
+			}
+
+			//generate random high value
+			function grhv() {
+				return 128 + Math.floor(Math.random() * 128);
+			}
+
+			//make background a random bright value
+			window.onload = () => {
+				document.getElementsByTagName('body')[0].style["background-color"] = `rgb(${grhv()}, ${grhv()}, ${grhv()})`;
+			};
+		</script>
+	</head>
+	<body>
+		<div style="display:inline">
+			<h1>Hey there!</h1>
+			<h3>This is the Homepage of Taureon's Discord Bot!</h3>
+			<p style="padding-bottom:16;color:rgb(64,64,64);font-size:12">(aka TauBot)</p>
+
+			<button onclick="redir('./index.html')">Homepage</button>
+			<button onclick="redir('./botinvite.html')">Invite the bot</button>
+			<p style="font-size:5"></p>
+			<!--<button onclick="redir('./socials.html')">Social Medias</button>-->
+
+			<p style="padding-top:16"><b>Fun stuffs:</b></p>
+			<button onclick="redir('./games/counter.html')">Counter</button>
+			<button onclick="redir('./games/button.html')">Button</button>
+			<button onclick="redir('./games/guesser.html')">Guesser</button>
+			<!--<button onclick="redir('./games/timeleft.html')">Time Left</button>-->
+			<p style="font-size:5"></p>
+			<button onclick="window.onload()">Regenerate background color</button>
+			<p style="color:rgb(64,64,64);font-size:14">This website is in alpha.</p>
+		</div>
+		<div style="position:absolute;bottom:0px;left:0px;color:rgb(64,64,128);font-size:12">
+			<a href="https://www.taureon.io/">Not affiliated with this company. I had no idea they existed before coming up with my name.</a>
+			<a href="http://taureon.com/">Or This company.</a>
+		</div>
+	</body>
+</html>

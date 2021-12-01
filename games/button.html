@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<title>Press the button!</title>
+		<script type="text/javascript">
+			var pressed;
+			var p;
+			window.onload=()=>{
+
+				if (localStorage.getItem('pressed') === null) {
+					pressed = 0;
+					localStorage.setItem('pressed', 0);
+				} else {
+					pressed = localStorage.getItem('pressed');
+				}
+				
+				p = document.getElementsByTagName('p')[0];
+
+				function update() {
+					if(pressed == 10) {
+						p.innerHTML = "<b>You won!</b>";
+						document.body.style = "background-color:00ff88";
+					} else if (pressed > 10) {
+						p.innerHTML = "<b>You lost!</b>"
+						document.body.style = "background-color:ff8888";
+					} else {
+						p.innerHTML = `Press the button ${10 - pressed} times!`
+					}
+				}
+
+				update()
+
+				document.getElementsByTagName('button')[0].onclick = () => {
+					pressed++
+					localStorage.setItem('pressed', pressed)
+					
+					update()
+				};
+			};
+		</script>
+	</head>
+	<body>
+		<p>Press the button 10 times!</p>
+		<button>Button</button>	
+	</body>
+</html>

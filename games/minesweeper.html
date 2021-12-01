@@ -1,0 +1,173 @@
+<html>
+	<head>
+		<title>Minesweeper</title>
+		<style>
+			button {
+				width: 76px;
+				border-style: solid
+			}
+
+			body {
+				display: block;
+				position: absolute;
+				top: 45%;
+				left: 50%;
+				transform: translate(-50%,-50%)
+			}
+
+			/* difficulty selection */
+			.trivial {
+				border-color: darkcyan;
+				background-color: cyan;
+			}
+			.easy {
+				border-color: green;
+				background-color: lime;
+			}
+			.medium {
+				border-color: olive;
+				background-color: yellow;
+			}
+			.hard {
+				border-color: #b05000;
+				background-color: orange;
+			}
+			.expert {
+				border-color: darkred;
+				background-color: red/*rgb(255, 15, 15)*/;
+			}
+			.custom {
+				border-color: darkblue;
+				background-color: blue/*rgb(23, 23, 255)*/;
+			}
+
+			/* custom game */
+			input {
+				border-style: solid
+			}
+			.custom_setting {
+				display: inline;
+				padding-top: 15px
+			}
+		</style>
+		<!-- https://github.com/Taureon/MinesweeperGenerator -->
+		<script type="text/javascript">generateMap=(r=9,o=6,a=15)=>{for(r<4&&(r=4),o<4&&(o=4),r>16&&(r=16),o>16&&(o=16);a>r*o/2;)a=Math.floor(a/2);for(var f=Array(r).fill(()=>Array(o).fill(0)).map(r=>r()),t=0,l=0,h=0;h<a;)t=Math.floor(Math.random()*r),l=Math.floor(Math.random()*o),f[t][l]||(h++,f[t][l]=-1);function n(a,t){return-1!==a&&-1!==t&&a!==r&&t!==o&&-1===f[a][t]}for(t=0;t<r;t++)for(l=0;l<o;l++)f[t][l]||[-1,0,1].forEach(r=>{[-1,0,1].forEach(o=>{f[t][l]+=n(t-r,l-o)})});return f};</script>
+		<script type="text/javascript">
+			
+			const setDiff = async diff => {
+				let width, height, mines, diff_div = document.getElementById("diff_div");
+				switch (diff) {
+					case 0:
+						diff = "Trivial";
+						width = 8;
+						height = 7;
+						mines = 7;
+						break;
+
+					case 1:
+						diff = "Easy";
+						width = 11;
+						height = 8;
+						mines = 10;
+						break;
+
+					case 2:
+						diff = "Medium";
+						width = 13;
+						height = 9;
+						mines = 12;
+						break;
+
+					case 3:
+						diff = "Hard";
+						width = 15;
+						height = 10;
+						mines = 16;
+						break;
+
+					case 4:
+						diff = "Expert";
+						width = 17;
+						height = 11;
+						mines = 21;
+						break;
+
+					case 5:
+						diff = "Random";
+
+						//generate random with/height from 8 to 17
+						width = 8 + Math.floor(Math.random() * 8);
+						height = 8 + Math.floor(Math.random() * 8);
+
+						//average width and height and round
+						mines = Math.round((width + height) / 2);
+						break;
+
+					default:
+						diff = "Custom";
+						await new Promise(Resolve => {
+								
+								//switch menus to the custom game settings one
+								diff_div.remove();
+								document.getElementsByTagName("h1").innerText = "Choose your custom game parameters:"
+								document.getElementById("custom_div").hidden=false;
+
+								//this is garbage but functional garbage
+								document.getElementById("custom_play").onclick = ()=> {
+									width = parseInt(document.getElementById("width").value),
+									height = parseInt(document.getElementById("height").value),
+									mines = parseInt(document.getElementById("mines").value)
+									Resolve();
+								};
+						});
+
+				}
+
+				//debug
+				//alert(`W: ${width}\nH: ${height}\nM: ${mines}`);
+				if (diff_div) diff_div.remove();
+				document.getElementById("custom_div").remove();
+				document.getElementsByTagName("title")[0].innerText += " - " + diff;
+
+				//game starts here
+				let map = generateMap(width, height, mines);
+			};
+
+			//make the random button a random color
+			window.onload=()=>{
+				let randomButton = document.getElementsByClassName("random")[0],
+					hue = Math.floor(Math.random() * 100);
+				randomButton.style["background-color"] = `hsl(${hue}, 100%, 50%)`;
+				randomButton.style["border-color"] = `hsl(${hue}, 100%, 25%)`;
+			};
+		</script>
+	</head>
+	<body>
+		<div id="diff_div">
+			<h1>Choose your game difficulty:</h1>
+			<button class="trivial" onclick="setDiff(0)">Trivial</button>
+			<button class="easy" onclick="setDiff(1)">Easy</button>
+			<button class="medium" onclick="setDiff(2)">Medium</button>
+			<button class="hard" onclick="setDiff(3)">Hard</button>
+			<button class="expert" onclick="setDiff(4)">Expert</button>
+			<p style="font-size:20"></p>
+			<button class="random" onclick="setDiff(5)">Random</button>
+			<button class="custom" onclick="setDiff(8008135)">Custom</button>
+		</div>
+
+		<div hidden id="custom_div">
+			<p class="custom_setting">width:</p>
+			<input style="display:block" id="width" type="number" value="8"></input>
+			<p class="custom_setting">height:</p>
+			<input style="display:block" id="height" type="number" value="8"></input>
+			<p class="custom_setting">mines:</p>
+			<input style="display:block" id="mines" type="number" value="8"></input>
+			<p style="font-size:10"></p>
+			<button id="custom_play">Play custom game</button>	
+		</div>
+
+		<div hidden id="game_div">
+			
+		</div>
+	</body>
+</html>

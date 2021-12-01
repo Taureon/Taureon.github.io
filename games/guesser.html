@@ -1,0 +1,53 @@
+<html>
+	<head>
+		<title>Number Guesser!</title>
+		<style>
+			* {
+				text-align: center;
+				font-family: sans-serif;
+			}
+
+		</style>
+		<script type="text/javascript">
+			var removethis;
+			var output;
+			var input;
+			var number = Math.floor(Math.random()*65536);
+
+			function once() {
+				document.getElementById('begone').remove();
+				guess();
+				document.getElementsByTagName('button')[0].onclick = guess;
+			}
+
+			function guess() {
+				var guess = Number(input.value);
+				if (guess < number) {
+					output.innerHTML = "Your guess is <b>too small</b>";
+				} else if (guess > number) {
+					output.innerHTML = "Your guess is <b>too large</b>";
+				} else {
+					output.innerText = "You have guessed the correct number!";
+				}
+			}
+
+			window.onload = ()=>{
+				output = document.getElementById('output');
+				input = document.getElementById('input');
+			};
+		</script>
+	</head>
+	<body style="background-color:rgb(127,255,127)">
+		<h1 style="padding-bottom:20;padding-top:5">Number Guesser</h1>
+		<div style="padding-bottom:5" id="begone">
+			<h3>How the game works:</h3>
+			<p>The game generates a random number between <b>0</b> and <b>65535</b>, and the objective is to <b>find that number</b>.</p>
+			<p>Dont worry about not guessing correctly, because you will be told if your guess is either <b>too large</b> or <b>too small</b>!</p>
+			<p>You have <b>infinite tries</b> to guess it!</p>
+		</div>
+		<p style="padding-top:7" id="output"></p>
+		<input type="number" id="input" />
+		<button onclick="once()">Check the guess</button>
+		<p style="position:absolute;bottom:0px;opacity:0.5;font-size:12">Feel free to cheat. idgaf tbh.</p>
+	</body>
+</html>

@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<title>TauBot API Documentation</title>
+		<style>
+			*{font-family:sans-serif}
+			.a {
+				background-color: f0f0f0;
+				font-family: 'Courier New', monospace
+			}
+			span {
+				background-color: d0d0d0;
+				font-family: 'Courier New', monospace
+			}
+			.b {
+				color: 808080;
+				font-size: 12
+			}
+			.c{padding-top:14}
+		</style>
+	</head>
+	<body>
+		<h3>Antichamber</h3>
+		<p>Gets one random sentence of life advice from the game <a href="https://store.steampowered.com/app/219890/Antichamber/">Antichamber</a>.</p>
+		<p class="a">./antichamber</p>
+
+		<h3 class="c">Useless Web</h3>
+		<p>Gets one random useless website url. Websites from <a href="https://theuselessweb.com/">The Useless Web</a>.</p>
+		<p class="a">./uselessweb</p>
+
+		<h3 class="c">Hyperlinked</h3>
+		<p>Gets a list of <a href="https://reddit.com/r/Hyperlinked/">Hyperlinked</a> characters that match the attribute info provided.</p>
+		<p class="a">./hyperlinked/<span>{attribute}</span>/<span>{data}</span></p>
+		<p class="a"><span>attribute</span>: Type of attribute. ("name", "age", "size", "gender")</p>
+		<p class="a"><span>data</span>: Piece of information.</p>
+		<p class="a"><span>name</span>: String (case-insensitive) that represents the full name. ("spotify", "4Chan", "YouTube")</p>
+		<p class="a"><span>age</span>: Integer that represents the age in years.</p>
+		<p class="a"><span>size</span>: Integer that represents the height in centimeters.</p>
+		<p class="a"><span>gender</span>: String that represents the gender. ("male", "female", "unknown" for 4chan)</p>
+		<p class="b">I could add sexualities if I can find a reliable source</p>
+		<p class="b">Last Updated: 12.04.2021</p>
+	</body>
+</html>

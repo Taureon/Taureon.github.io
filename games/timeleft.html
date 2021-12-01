@@ -1,0 +1,6 @@
+<html>
+	<head><title>The Time Left...</title>
+		<script type="text/javascript">window.onload=()=>{var a=document.getElementById("counter"),b=new Date(new Date().getFullYear()+1,0).getTime(),c=setInterval(()=>{if(b>new Date().getTime()){var d=new Date(b-new Date().getTime()).getTime().toString(),e=BigInt(d.slice(0,d.length-3)),f=e/60n;e%=60n,e=e.toString();var g=f/60n;f%=60n,f=f.toString();var h=(g/24n).toString();g%=24n,g=g.toString(),e="0".repeat(2-e.length)+e,f="0".repeat(2-f.length)+f,g="0".repeat(2-g.length)+g,h="0".repeat(3-h.length)+h,a.innerText=`${h}:${g}:${f}:${e}`,a.innerText=[h,g,f,e].join(":")}else clearInterval(c),a.innerText="000:00:00:00"},1)};</script>
+	</head>
+	<body style="background-color:#000;overflow:hidden"><p style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:100vh;font-family:sans-serif;font-size:100;color:#fff" id="counter">---:--:--:--</p></body>
+</html>
