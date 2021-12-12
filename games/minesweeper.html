@@ -62,6 +62,7 @@
 				display: flex;
 				justify-content: center;
 				align-items: center;
+				user-select: none
 			}
 			.unrevealed { background-color: gray }
 			.unrevealed.flagged { color: darkred }
@@ -270,7 +271,7 @@
 				},
 
 				updateTile = (x, y, mode) => {
-					
+
 					let tile = map[x][y];
 
 					switch(mode) {
