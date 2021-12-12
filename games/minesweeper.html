@@ -64,9 +64,7 @@
 				align-items: center;
 			}
 			.unrevealed { background-color: gray }
-			.unrevealed.flagged {
-
-			}
+			.unrevealed.flagged { color: darkred }
 			._-1 { background-color: red }
 			._1 { color: blue }
 			._2 { color: green }
@@ -211,7 +209,13 @@
 
 					tempDiv.addEventListener('click', event => {
 						let [, x, y] = event.target.id.split('_');
-						updateTile(parseInt(x), parseInt(y), event.which);
+						updateTile(parseInt(x), parseInt(y), 0);
+					});
+
+					tempDiv.addEventListener("contextmenu", event => {
+						event.preventDefault();
+						let [, x, y] = event.target.id.split('_');
+						updateTile(parseInt(x), parseInt(y), 1);
 					});
 
 					return {
@@ -266,13 +270,13 @@
 				},
 
 				updateTile = (x, y, mode) => {
-
+					
 					let tile = map[x][y];
 
 					switch(mode) {
 
 						//reveal tile
-						case 1:
+						case 0:
 							if (tile.div.classList.contains('flagged')) break;
 
 							if (!tile.div.classList.contains('unrevealed')) break;
@@ -292,16 +296,16 @@
 								getSurroundingTiles(x, y).forEach(nearTile => {
 
 									//if unrevealed, reveal it
-									if (nearTile.div.classList.contains('unrevealed')) updateTile(nearTile.x, nearTile.y, 1);
+									if (nearTile.div.classList.contains('unrevealed')) updateTile(nearTile.x, nearTile.y, 0);
 								});
 							}
 
 							break;
 
 						//flag tile
-						case 3:
-							if (!tile.unrevealed) return;
-							tile.div.classList.toggle('flagged');
+						case 1:
+							if (!tile.div.classList.contains('unrevealed')) return;
+							tile.div.innerText = tile.div.classList.toggle('flagged') ? "?" : "";
 					}
 
 					map[x][y] = tile;
@@ -347,7 +351,7 @@
 		</div>
 
 		<div hidden id="game_div">
-			<div oncontextmenu="return false" id="board"></div>
+			<div id="board"></div>
 			<button onclick="help()">Stuck? (WIP)</button>
 		</div>
 	</body>
