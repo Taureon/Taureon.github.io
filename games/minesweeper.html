@@ -8,11 +8,11 @@
 			}
 
 			body {
-				display: block;
-				position: absolute;
-				top: 45%;
-				left: 50%;
-				transform: translate(-50%,-50%)
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				height: 100%;
+				margin: 0px;
 			}
 
 			/* difficulty selection */
@@ -49,9 +49,11 @@
 			}
 
 			/* game stuff */
-			.column { float: left }
+			#board {
+				display: grid;
+				grid-template-columns: 26px;
+			}
 			.tile {
-				display: block;
 				width: 20px;
 				height: 20px;
 				border-style: solid;
@@ -187,14 +189,18 @@
 
 								//this is garbage but functional garbage
 								document.getElementById("custom_play").onclick = ()=> {
-									width = parseInt(document.getElementById("width").value),
-									height = parseInt(document.getElementById("height").value),
+									//css grids
+									width = parseInt(document.getElementById("height").value),
+									height = parseInt(document.getElementById("width").value),
 									mines = parseInt(document.getElementById("mines").value)
 									Resolve();
 								};
 						});
 
 				}
+
+				//css grids, go to hell
+				[width, height] = [height, width];
 
 				if (diff_div) diff_div.remove();
 				document.getElementById("custom_div").remove();
@@ -228,16 +234,9 @@
 
 				let board = document.getElementById('board');
 
-				map.forEach(column => {
+				map.forEach(column => column.forEach(tile => board.appendChild(tile.div)));
 
-					let columnDiv = document.createElement('div');
-
-					columnDiv.classList.add('column');
-
-					column.forEach(tile => columnDiv.appendChild(tile.div));
-
-					board.appendChild(columnDiv);
-				});
+				board.style["grid-template-columns"] += " 26px".repeat(map[0].length);
 
 				board.parentElement.hidden = false;
 
@@ -280,7 +279,16 @@
 						case 0:
 							if (tile.div.classList.contains('flagged')) break;
 
-							if (!tile.div.classList.contains('unrevealed')) break;
+							if (!tile.div.classList.contains('unrevealed')) {
+								let flags = 0,
+									tiles = getSurroundingTiles(x, y).filter(nearTile => nearTile.div.classList.contains('unrevealed'));
+
+								//if as many flagged tiles are around it as the amount of mines surround it 
+								tiles.forEach(nearTile => nearTile.div.classList.contains('flagged') && flags++);
+								if (flags === tile.mines) tiles.forEach(nearTile => updateTile(nearTile.x, nearTile.y, 0));
+
+								break;
+							}
 
 							tile.div.classList.add("_" + tile.mines);
 							tile.div.classList.remove("unrevealed");
@@ -305,8 +313,28 @@
 
 						//flag tile
 						case 1:
-							if (!tile.div.classList.contains('unrevealed')) return;
-							tile.div.innerText = tile.div.classList.toggle('flagged') ? "?" : "";
+
+							//if right clicking an unrevealed tile, just flag it
+							if (tile.div.classList.contains('unrevealed')) {
+								//browser displays "⚑" as "âš‘" instead, and using a html code fixes that
+								tile.div.innerHTML = tile.div.classList.toggle('flagged') ? "&#9873;" : "";
+								break;
+
+							} else {
+							
+								//if right clicking a cleared tile, get all uncleared tiles around it
+								let tiles = getSurroundingTiles(x, y).filter(nearTile => nearTile.div.classList.contains('unrevealed'));
+
+								//if as many unrevealed tiles as there are mines around it, flag all unflagged tiles
+								if (tile.mines !== tiles.length) break;
+								tiles
+								.filter(nearTile => !nearTile.div.classList.contains('flagged'))
+								.forEach(nearTile => updateTile(nearTile.x, nearTile.y, 1));
+
+							}
+							
+							break;
+							
 					}
 
 					map[x][y] = tile;
