@@ -52,6 +52,7 @@
 			#board {
 				display: grid;
 				grid-template-columns: 26px;
+				background-color: yellow;
 			}
 			.tile {
 				width: 20px;
@@ -78,14 +79,14 @@
 			._7 { color: maroon }
 			._8 { color: turquoise }
 		</style>
-		<!-- https://github.com/Taureon/MinesweeperGenerator -->
+		<!-- modified version of: https://github.com/Taureon/MinesweeperGenerator -->
 		<script type="text/javascript">
 			let generateMap = (width = 9, height = 6, mines = 15) => {
 
 				//make sure the values selected arent too broken
 				if (width < 1) width = 1;
 				if (height < 1) height = 1;
-				while (mines > width * height) mines = width * height;
+				while (mines > (width * height) - 9) mines = (width * height) - 9;
 
 				//generate empty map
 				var temp = ()=>Array(height).fill(0);
@@ -104,24 +105,7 @@
 					}
 				}
 
-				function tileIsAMine(x, y) {
-					if (x === -1 || y === -1 || x === width || y === height) return false;
-					return map[x][y] === -1;
-				}
-
-				//add mine counters
-				for (x = 0; x < width; x++) {
-					for (y = 0; y < height; y++) {
-						if (!map[x][y]) {
-							//this seems dumb, but it works!
-							[-1, 0, 1].forEach((a) => {
-								[-1, 0, 1].forEach((b) => {
-									map[x][y] += tileIsAMine(x - a, y - b);
-								});
-							});
-						}
-					}
-				}
+				//no mine counts because thats going to be generated later
 
 				return map;
 			};
@@ -130,20 +114,20 @@
 			let map, updateTile, getSurroundingTiles;
 			
 			const setDiff = async diff => {
-				let width, height, mines, diff_div = document.getElementById("diff_div");
+				let width, height, mines, firstRevealBoolean = true, diff_div = document.getElementById("diff_div");
 				switch (diff) {
 					case 0:
 						diff = "Trivial";
 						width = 8;
 						height = 7;
-						mines = 7;
+						mines = 5;
 						break;
 
 					case 1:
 						diff = "Easy";
 						width = 11;
 						height = 8;
-						mines = 10;
+						mines = 8;
 						break;
 
 					case 2:
@@ -157,14 +141,14 @@
 						diff = "Hard";
 						width = 15;
 						height = 10;
-						mines = 16;
+						mines = 17;
 						break;
 
 					case 4:
 						diff = "Expert";
 						width = 17;
 						height = 11;
-						mines = 21;
+						mines = 25;
 						break;
 
 					case 5:
@@ -189,9 +173,8 @@
 
 								//this is garbage but functional garbage
 								document.getElementById("custom_play").onclick = ()=> {
-									//css grids
-									width = parseInt(document.getElementById("height").value),
-									height = parseInt(document.getElementById("width").value),
+									width = parseInt(document.getElementById("width").value),
+									height = parseInt(document.getElementById("height").value),
 									mines = parseInt(document.getElementById("mines").value)
 									Resolve();
 								};
@@ -277,6 +260,64 @@
 
 						//reveal tile
 						case 0:
+
+							//if first reveal, move the mines on and near the tile that is clicked
+							if (firstRevealBoolean) {
+								firstRevealBoolean = false;
+
+								//make a list of the 9 tiles that the mines need to be moved of
+								let tiles = getSurroundingTiles(x, y);
+								tiles.push(tile);
+
+								//make a list of mineless tiles to move the mines to
+								let minelessTiles = [];
+								map.forEach(column => column.forEach(possiblyClearTile => {
+
+									//ignore tiles with mines
+									if (possiblyClearTile.mines === -1) return;
+
+									//ignore tile in the list of tiles to move the mine from
+									if (tiles.some(tileToMove => tileToMove.x === possiblyClearTile.x && tileToMove.y === possiblyClearTile.y)) return;
+
+									minelessTiles.push(possiblyClearTile);
+								}));
+
+								//from the tiles to move, clear all tiles that have no mine
+								tiles = tiles.filter(tileToMove => tileToMove.mines === -1);
+
+								//actually move the mine
+								tiles.forEach(tileToMove => {
+
+									//pick avalable tile
+									let index = Math.floor(minelessTiles.length * Math.random());
+
+									//set it to a mine and clear the tile that had the mine
+									map[minelessTiles[index].x][minelessTiles[index].y].mines = -1;
+									map[tileToMove.x][tileToMove.y].mines = 0;
+
+									//tile it not available anymore so remove it
+									minelessTiles[index] = minelessTiles[minelessTiles.length - 1];
+									minelessTiles.pop();
+								});
+
+								//add mine counters to tiles without mines
+								map.map(column => column.map(t => {
+									if (t.mines === -1) return t;
+
+									[-1, 0, 1].forEach(a => {
+										[-1, 0, 1].forEach(b => {
+											if (t.x + a === -1
+											 || t.y + b === -1
+											 || t.x + a === map.length
+											 || t.y + b === map[0].length) return;
+											if (map[t.x + a][t.y + b].mines === -1) t.mines++;
+										});
+									});
+
+									return t;
+								}));
+							}
+
 							if (tile.div.classList.contains('flagged')) break;
 
 							if (!tile.div.classList.contains('unrevealed')) {
