@@ -270,7 +270,9 @@
 					if (flag_needshelp) {
 						flag_needshelp = false;
 					
-						mode = (tile.mines === -1) * 1;
+						//if the tile has a mine, imitate a right click
+						//if no mine, imitate a left click
+						mode = tile.mines === -1 ? 1 : 0;
 						
 						//make the tiles not transparent anymore
 						document.styleSheets[0].rules[12].style.opacity = 1;
