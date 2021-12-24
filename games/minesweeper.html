@@ -52,7 +52,7 @@
 			#board {
 				display: grid;
 				grid-template-columns: 26px;
-				background-color: yellow;
+				background-color: yellow
 			}
 			.tile {
 				width: 20px;
@@ -68,7 +68,10 @@
 				user-select: none
 			}
 			.unrevealed { background-color: gray }
-			.unrevealed.flagged { color: darkred }
+			.unrevealed.flagged {
+				color: darkred;
+				opacity: 1
+			}
 			._-1 { background-color: red }
 			._1 { color: blue }
 			._2 { color: green }
@@ -114,7 +117,11 @@
 			let map, updateTile, getSurroundingTiles;
 			
 			const setDiff = async diff => {
-				let width, height, mines, firstRevealBoolean = true, diff_div = document.getElementById("diff_div");
+				let width, height, mines,
+					flag_needshelp = false;
+					flag_firstreveal = true,
+					minecount_div = document.getElementById("minecount"),
+					diff_div = document.getElementById("diff_div");
 				switch (diff) {
 					case 0:
 						diff = "Trivial";
@@ -220,6 +227,9 @@
 				map.forEach(column => column.forEach(tile => board.appendChild(tile.div)));
 
 				board.style["grid-template-columns"] += " 26px".repeat(map[0].length);
+				board.style.width = map[0].length * 26;
+
+				minecount_div.innerHTML = `Mines left: <b>${mines}</b>`;
 
 				board.parentElement.hidden = false;
 
@@ -256,14 +266,24 @@
 
 					let tile = map[x][y];
 
+					//if the user has pressed the help button
+					if (flag_needshelp) {
+						flag_needshelp = false;
+					
+						mode = (tile.mines === -1) * 1;
+						
+						//make the tiles not transparent anymore
+						document.styleSheets[0].rules[12].style.opacity = 1;
+					}
+
 					switch(mode) {
 
 						//reveal tile
 						case 0:
 
 							//if first reveal, move the mines on and near the tile that is clicked
-							if (firstRevealBoolean) {
-								firstRevealBoolean = false;
+							if (flag_firstreveal) {
+								flag_firstreveal = false;
 
 								//make a list of the 9 tiles that the mines need to be moved of
 								let tiles = getSurroundingTiles(x, y);
@@ -378,12 +398,18 @@
 							
 					}
 
+					minecount_div.innerHTML = `Mines left: <b>${8008315}</b>`;
+
 					map[x][y] = tile;
 				},
 				
 				//if user gets stuck
 				//i am adding this because i dont want to make the minesweeper map gen fool proof
 				help = () => {
+					if (flag_firstreveal) return;
+					flag_needshelp = true;
+					document.getElementsByTagName('button')[0].remove();
+					document.styleSheets[0].rules[12].style.opacity = 0.5;
 				};
 			};
 
@@ -423,6 +449,7 @@
 		<div hidden id="game_div">
 			<div id="board"></div>
 			<button onclick="help()">Stuck? (WIP)</button>
+			<p id="minecount" style="font-family:Sans-serif;display:inline"></p>
 		</div>
 	</body>
 </html>
