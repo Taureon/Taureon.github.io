@@ -123,40 +123,41 @@
 					flag_firstreveal = true,
 					minecount_div = document.getElementById("minecount"),
 					diff_div = document.getElementById("diff_div");
+
 				switch (diff) {
 					case 0:
 						diff = "Trivial";
 						width = 8;
-						height = 7;
-						mines = 5;
+						height = 8;
+						mines = 6;
 						break;
 
 					case 1:
 						diff = "Easy";
-						width = 11;
-						height = 8;
-						mines = 8;
-						break;
-
-					case 2:
-						diff = "Medium";
-						width = 13;
+						width = 12;
 						height = 9;
 						mines = 12;
 						break;
 
+					case 2:
+						diff = "Medium";
+						width = 16;
+						height = 11;
+						mines = 22;
+						break;
+
 					case 3:
 						diff = "Hard";
-						width = 15;
-						height = 10;
-						mines = 17;
+						width = 20;
+						height = 12;
+						mines = 33;
 						break;
 
 					case 4:
 						diff = "Expert";
-						width = 17;
-						height = 11;
-						mines = 25;
+						width = 24;
+						height = 15;
+						mines = 60;
 						break;
 
 					case 5:
@@ -190,7 +191,7 @@
 
 				}
 
-				//css grids, go to hell
+				//css, go to hell
 				[width, height] = [height, width];
 
 				if (diff_div) diff_div.remove();
