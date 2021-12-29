@@ -1,6 +1,14 @@
 <html>
 	<head>
 		<title>Minesweeper</title>
+		
+		<!--discord embed stuff-->
+		<meta property="og:type" content="website">
+		<meta property="og:title" content="TauBot's Minesweeper" />
+		<meta property="og:description" content="Play some Minesweeper! Even comes with some tweaks and infinite custom field sizes! (If your computer can run it)" />
+		<meta property="og:url" content="./minesweeper.html" />
+		<meta property="og:image" content="./../assets/minesweeper.png" />
+
 		<style>
 			button {
 				width: 76px;
@@ -266,7 +274,7 @@
 					return tiles;
 				},
 
-				updateTile = (x, y, mode) => {
+				updateTile = (x, y, mode, flood) => {
 
 					let tile = map[x][y];
 
@@ -375,10 +383,31 @@
 									break;
 								}
 
-								getSurroundingTiles(x, y).forEach(nearTile => {
+								//flood clear algorithm
+								let tilesToReveal = [],
+									nextTilesFlood = getSurroundingTiles(x, y);
 
-									//if unrevealed, reveal it
-									if (nearTile.div.classList.contains('unrevealed')) updateTile(nearTile.x, nearTile.y, 0);
+								while(nextTilesFlood.length) {
+
+									nextTilesFlood = nextTilesFlood.map(nextTile => {
+										if (nextTile.mines === 0) return getSurroundingTiles(nextTile.x, nextTile.y)
+									})
+
+									nextTilesFlood = nextTilesFlood.flat()
+										//remove already revealed tiles
+										.filter(item => item !== undefined && !tilesToReveal.some(element => element.x === item.x && element.y === item.y))
+										//remove dublicates
+										.filter((item, index, array) => array.findIndex(element => element.x === item.x && element.y === item.y) === index);
+
+									tilesToReveal.push(...nextTilesFlood);
+								}
+
+								tilesToReveal.forEach(tileToReveal => {
+									tileToReveal.div.classList.remove('unrevealed');
+									if (tileToReveal.mines !== 0) {
+										tileToReveal.div.classList.add("_" + tileToReveal.mines);
+										tileToReveal.div.innerText = tileToReveal.mines;
+									}
 								});
 							}
 
