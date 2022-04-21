@@ -1,0 +1,14 @@
+<html>
+    <body>
+        <script>
+            if (window.location.hash) {
+                window.location.href = atob(window.location.hash.slice(1));
+            } else {
+                let input = document.createElement('input');
+                input.type = 'text';
+                input.onchange = () => input.value = window.location.href + '#' + btoa(input.value);
+                document.body.appendChild(input);
+            }
+        </script>
+    </body>
+</html>
