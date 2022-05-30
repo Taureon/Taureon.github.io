@@ -407,6 +407,7 @@
 									if (tileToReveal.mines !== 0) {
 										tileToReveal.div.classList.add("_" + tileToReveal.mines);
 										tileToReveal.div.innerText = tileToReveal.mines;
+										unrevealedTiles--;
 									}
 								});
 							}
